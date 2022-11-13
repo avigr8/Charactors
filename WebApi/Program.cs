@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 using WebApi.Data;
 using WebApi.Services.CharecterService;
 using WebApi.Services.WeaponService;
+using WebApi.Services.FightService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IWeaponService, WeaponService>();
+builder.Services.AddScoped<IFightService, FightService>();
 
 
 var app = builder.Build();
