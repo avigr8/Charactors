@@ -3,42 +3,41 @@ using WebApi.Services.CharecterService;
 
 namespace WebApi.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 
 public class CharecterController : ControllerBase
 {
-    private readonly ICharecterService charecterService;
+    private readonly ICharecterService _charecterService;
 
-    public CharecterController(ICharecterService _charecterService)
+    public CharecterController(ICharecterService charecterService)
     {
-        charecterService = _charecterService;
+        _charecterService = charecterService;
     }
 
-
-    [HttpGet]
-    [Route("GetAll")]
+    [HttpGet("GetAll")]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get()
     {
-        return Ok(await charecterService.GetAll());
+        return Ok(await _charecterService.GetAll());
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> Get(int id)
     {
-        
-        return Ok(await charecterService.GetById(id));
+
+        return Ok(await _charecterService.GetById(id));
     }
 
     [HttpPost]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> AddCharacter(AddCharacterDto newCharacter)
     {
-        return Ok(await charecterService.AddCharacter(newCharacter));
+        return Ok(await _charecterService.AddCharacter(newCharacter));
     }
     [HttpPut]
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto updateCharacter)
     {
-        var response = await charecterService.UpdateCharacter(updateCharacter);
+        var response = await _charecterService.UpdateCharacter(updateCharacter);
 
         if (response.Data == null)
             return NotFound(response);
@@ -49,9 +48,20 @@ public class CharecterController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Delete(int id)
     {
-        var response = await charecterService.DeleteCharacter(id);
+        var response = await _charecterService.DeleteCharacter(id);
 
         if (response.Data == null)
+            return NotFound(response);
+
+        return Ok(response);
+    }
+
+    [HttpPost("Skill")]
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(AddCharacterSkillDto newCharacterSkill)
+    {
+        var response=await _charecterService.AddCharacterSkill(newCharacterSkill);
+
+        if(response.Data== null) 
             return NotFound(response);
 
         return Ok(response);
